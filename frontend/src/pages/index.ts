@@ -1,0 +1,8 @@
+export { DashboardPage } from "./dashboard"
+export { RequestsPage } from "./requests"
+export { PermitDetailPage } from "./permit-detail"
+export { ProjectViewPage } from "./project-view"
+export { QueuePage } from "./queue"
+export { AnalyticsPage } from "./analytics"
+export { TeamPage } from "./team"
+export { SettingsPage } from "./settings"
