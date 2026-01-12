@@ -729,3 +729,51 @@ export function getProjectWithDetails(projectId: string) {
     invoice: projectInvoice,
   }
 }
+
+// Helper to get all projects with aggregated permit data
+export function getAllProjectsWithSummary() {
+  return projects.map((project) => {
+    const site = sites.find((s) => s.id === project.siteId)!
+    const customer = customers.find((c) => c.id === site.customerId)!
+    const projectPermits = permitRequests.filter((pr) => pr.projectId === project.id)
+    const projectInvoice = invoices.find((inv) => inv.projectId === project.id)
+
+    // Calculate status breakdown
+    const statusCounts: Record<string, number> = {}
+    projectPermits.forEach((permit) => {
+      statusCounts[permit.status] = (statusCounts[permit.status] || 0) + 1
+    })
+
+    // Calculate overall progress (completed permits / total permits)
+    const completedCount = projectPermits.filter(
+      (p) => p.status === "completed" || p.status === "permit_ready"
+    ).length
+    const progressPercent = projectPermits.length > 0
+      ? Math.round((completedCount / projectPermits.length) * 100)
+      : 0
+
+    return {
+      id: project.id,
+      name: project.name,
+      scopeOfWork: project.scopeOfWork,
+      createdAt: project.createdAt,
+      invoiceStatus: project.invoiceStatus,
+      // Site info
+      siteId: site.id,
+      siteAddress: site.address,
+      jurisdictionId: site.jurisdictionId,
+      jurisdictionName: site.jurisdictionName,
+      // Customer info
+      customerId: customer.id,
+      customerName: customer.name,
+      customerEmail: customer.email,
+      // Permits summary
+      permitsCount: projectPermits.length,
+      statusCounts,
+      progressPercent,
+      completedCount,
+      // Invoice
+      invoice: projectInvoice,
+    }
+  })
+}

@@ -3,6 +3,7 @@ import { Layout } from "@/components/layout"
 import {
   DashboardPage,
   RequestsPage,
+  ProjectsPage,
   PermitDetailPage,
   ProjectViewPage,
   QueuePage,
@@ -19,7 +20,7 @@ function App() {
           <Route index element={<DashboardPage />} />
           <Route path="requests" element={<RequestsPage />} />
           <Route path="permits/:permitId" element={<PermitDetailPage />} />
-          <Route path="projects" element={<RequestsPage />} />
+          <Route path="projects" element={<ProjectsPage />} />
           <Route path="projects/:projectId" element={<ProjectViewPage />} />
           <Route path="queue" element={<QueuePage />} />
           <Route path="analytics" element={<AnalyticsPage />} />

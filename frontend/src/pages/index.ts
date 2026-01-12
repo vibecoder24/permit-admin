@@ -1,5 +1,6 @@
 export { DashboardPage } from "./dashboard"
 export { RequestsPage } from "./requests"
+export { ProjectsPage } from "./projects"
 export { PermitDetailPage } from "./permit-detail"
 export { ProjectViewPage } from "./project-view"
 export { QueuePage } from "./queue"

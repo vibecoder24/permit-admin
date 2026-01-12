@@ -48,41 +48,34 @@ Customer (login-based)
 
 ---
 
-### 2. Requests List
-**Purpose:** Main working view for all permit requests
+### 2. Requests List (Flat Permits View)
+**Purpose:** Main working view for all permit requests - agent work queue
 
-**Grouping:**
-- Grouped by: Site → Project → Permit(s)
-- Expandable/collapsible groups
-- Project-level actions: View all, Raise invoice (bundles permits)
+**View Type:** Flat table of all permit requests (not grouped)
 
-**Table Columns (at permit level):**
-- Permit ID
+**Table Columns:**
+- Checkbox (for bulk selection)
+- Permit ID (link to detail)
 - Permit Type
-- Status (color indicator)
+- Project (link to project view)
+- Customer (name + email)
+- Site Address + Jurisdiction
+- Status (color-coded badge)
 - Automation Status (Auto / Manual / Failed)
+- Invoice Status
 - Submitted Date
 - Assigned To
-- Actions (→ Detail)
-
-**Project Header Row:**
-- Project name (editable)
-- Site address
-- Customer name / email
-- # of permits
-- Invoice status
+- Actions menu
 
 **Filters Panel:**
-- Date range (submitted date)
-- Jurisdiction (multi-select)
-- Permit type (multi-select)
-- Status (multi-select)
-- Automation status (Auto / Manual / Failed)
-- Assigned to
-- Invoice status (Not invoiced / Pending / Paid)
+- Jurisdiction (dropdown)
+- Permit type (dropdown)
+- Status (dropdown)
+- Automation status (dropdown)
+- Assigned to (dropdown with "Unassigned" option)
 
 **Search:**
-- Global search - email ID, customer name, site address, permit ID
+- Global search - permit ID, project name, customer name/email, site address
 
 **Bulk Actions:**
 - Assign to agent
@@ -90,7 +83,44 @@ Customer (login-based)
 
 ---
 
-### 3. Permit Detail
+### 3. Projects List
+**Purpose:** Project-level management view for invoicing, progress tracking, and customer organization
+
+**View Type:** Table of all projects with aggregated permit information
+
+**Table Columns:**
+- Project Name (link to project view)
+- Customer (name + email)
+- Site Address
+- Jurisdiction
+- Permits Count (with mini status breakdown: e.g., "3 permits: 1 new, 1 in review, 1 completed")
+- Overall Progress (progress bar or status summary)
+- Invoice Status (Not created / Draft / Sent / Paid / Refunded)
+- Created Date
+- Actions menu
+
+**Filters Panel:**
+- Jurisdiction (dropdown)
+- Invoice status (dropdown)
+- Has pending permits (checkbox)
+- Date range (project created date)
+
+**Search:**
+- Search by project name, customer name/email, site address
+
+**Actions:**
+- View Project → Project View page
+- Create Invoice (Admin only, if not created)
+- Quick permit count hover to see breakdown
+
+**Use Cases:**
+- Admin reviewing which projects need invoicing
+- Tracking overall project completion status
+- Customer-centric view of work in progress
+
+---
+
+### 4. Permit Detail
 **Purpose:** Full view of single permit request with all actions
 
 **Header:**
@@ -149,7 +179,7 @@ Payment Received → Permit Processing → Permit Ready → Completed
 
 ---
 
-### 4. Project View
+### 5. Project View (Detail)
 **Purpose:** Manage all permits under a project, handle bundled invoicing
 
 **Header:**
@@ -176,7 +206,7 @@ Payment Received → Permit Processing → Permit Ready → Completed
 
 ---
 
-### 5. New Permits Queue
+### 6. New Permits Queue
 **Purpose:** Triage incoming requests
 
 **Features:**
@@ -189,7 +219,7 @@ Payment Received → Permit Processing → Permit Ready → Completed
 
 ---
 
-### 6. Analytics & Reporting
+### 7. Analytics & Reporting
 **Purpose:** Track performance and identify bottlenecks
 
 **Summary Cards:**
@@ -231,7 +261,7 @@ Payment Received → Permit Processing → Permit Ready → Completed
 
 ---
 
-### 7. Team Management (Admin only)
+### 8. Team Management (Admin only)
 **Purpose:** Manage access and roles
 
 **Team List:**
@@ -249,7 +279,7 @@ Payment Received → Permit Processing → Permit Ready → Completed
 
 ---
 
-### 8. Settings (Admin only)
+### 9. Settings (Admin only)
 **Purpose:** System configuration
 
 - Jurisdiction list (add/edit/deactivate)
