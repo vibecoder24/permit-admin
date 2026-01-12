@@ -16,6 +16,7 @@ import { Avatar } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select } from "@/components/ui/select"
+import { FeatureInfo } from "@/components/ui/feature-info"
 import {
   Table,
   TableBody,
@@ -85,6 +86,14 @@ export function TeamPage() {
         title="Team Management"
         subtitle="Manage team members and access"
         actions={
+          <div className="flex items-center gap-2">
+            <FeatureInfo
+              title="Team Management"
+              priority="P2"
+              description="Manage team member access, roles, and status. Invite new members, change roles, and deactivate users. Admin-only feature."
+              dataSource="GET /api/team → teamMembers array. POST /api/team/invite for new members."
+              importance="Access control. Ensure right people have right access. Deactivate when someone leaves, promote to admin for senior staff."
+            />
           <Dialog open={showInvite} onOpenChange={setShowInvite}>
             <DialogTrigger asChild>
               <Button>
@@ -132,6 +141,7 @@ export function TeamPage() {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          </div>
         }
       />
 
@@ -248,7 +258,16 @@ export function TeamPage() {
         {/* Role Permissions Reference */}
         <Card className="mt-6">
           <div className="p-6">
-            <h3 className="font-medium mb-4">Role Permissions</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <h3 className="font-medium">Role Permissions</h3>
+              <FeatureInfo
+                title="Role Permissions"
+                priority="P3"
+                description="Reference table showing what each role can do. Viewer: read-only. Agent: can process permits. Admin: full access including billing and team management."
+                dataSource="Static permission matrix → Enforced via hasPermission() in useAuthStore"
+                importance="Understand access levels before assigning roles. Principle of least privilege - give users minimum access needed for their job."
+              />
+            </div>
             <Table>
               <TableHeader>
                 <TableRow>

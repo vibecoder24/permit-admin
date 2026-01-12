@@ -24,6 +24,7 @@ import {
 import { Header } from "@/components/layout"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { FeatureInfo } from "@/components/ui/feature-info"
 import {
   Table,
   TableBody,
@@ -54,7 +55,14 @@ export function AnalyticsPage() {
         title="Analytics"
         subtitle="Track performance and identify bottlenecks"
         actions={
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <FeatureInfo
+              title="Analytics Page"
+              priority="P2"
+              description="Business intelligence dashboard showing key metrics, trends, and team performance. Filter by time range to analyze different periods."
+              dataSource="GET /api/analytics?range={dateRange} → analyticsData object with aggregated metrics"
+              importance="Track business health. Monitor revenue, throughput, bottlenecks, and agent efficiency. Use for reporting and identifying improvement areas."
+            />
             <select
               value={dateRange}
               onChange={(e) => setDateRange(e.target.value)}
@@ -75,7 +83,18 @@ export function AnalyticsPage() {
 
       <div className="flex-1 overflow-auto p-6">
         {/* Summary Cards */}
-        <div className="mb-6 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            <h3 className="text-sm font-semibold">Key Metrics</h3>
+            <FeatureInfo
+              title="Key Metrics"
+              priority="P2"
+              description="5 key performance indicators: Total Revenue (paid invoices), Total Requests, Completion Rate (forms fully submitted), Avg Time to Submit (to jurisdiction), Automation Rate (auto vs manual)."
+              dataSource="GET /api/analytics/summary → Aggregated from permits, invoices, and activity data"
+              importance="Quick health check of business performance. Green/red indicators show period-over-period change."
+            />
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -146,6 +165,7 @@ export function AnalyticsPage() {
               </p>
             </CardContent>
           </Card>
+          </div>
         </div>
 
         {/* Charts Row 1 */}
@@ -153,7 +173,16 @@ export function AnalyticsPage() {
           {/* Requests Over Time */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Requests Over Time</CardTitle>
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-base">Requests Over Time</CardTitle>
+                <FeatureInfo
+                  title="Requests Over Time"
+                  priority="P2"
+                  description="Line chart showing daily permit request submissions over the selected time range. Helps identify trends, seasonality, and growth."
+                  dataSource="GET /api/analytics/requests-timeline → requestsOverTime array with date/count"
+                  importance="Volume trend analysis. Spot growth patterns, predict capacity needs, identify unusual spikes or drops."
+                />
+              </div>
             </CardHeader>
             <CardContent>
               <div className="h-80">
@@ -288,7 +317,16 @@ export function AnalyticsPage() {
         {/* Agent Performance Table */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Agent Performance</CardTitle>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-base">Agent Performance</CardTitle>
+              <FeatureInfo
+                title="Agent Performance"
+                priority="P2"
+                description="Shows each agent's workload and efficiency. Tracks requests handled, average completion time, and an efficiency rating based on speed."
+                dataSource="GET /api/analytics/agent-performance → requestsByAgent array with metrics per agent"
+                importance="Team management and workload balancing. Identify top performers, training needs, and capacity distribution."
+              />
+            </div>
           </CardHeader>
           <CardContent>
             <Table>

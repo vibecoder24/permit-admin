@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Select } from "@/components/ui/select"
+import { FeatureInfo } from "@/components/ui/feature-info"
 import {
   Table,
   TableBody,
@@ -52,6 +53,15 @@ export function QueuePage() {
       <Header
         title="New Permits Queue"
         subtitle={`${newPermits.length} permits awaiting review`}
+        actions={
+          <FeatureInfo
+            title="Queue Page"
+            priority="P0"
+            description="Shows only permits with 'new' status - freshly submitted and not yet reviewed. Sorted oldest first (FIFO) to ensure timely processing."
+            dataSource="GET /api/permits?status=new&sort=created_at:asc"
+            importance="Primary intake view. All new customer submissions appear here first. Check this view daily to maintain response SLA."
+          />
+        }
       />
 
       <div className="flex-1 overflow-auto p-6">
@@ -63,9 +73,18 @@ export function QueuePage() {
                 <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
               </div>
               <div>
-                <p className="font-medium text-red-900 dark:text-red-100">
-                  {failedCount} permit{failedCount > 1 ? "s" : ""} require manual handling
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="font-medium text-red-900 dark:text-red-100">
+                    {failedCount} permit{failedCount > 1 ? "s" : ""} require manual handling
+                  </p>
+                  <FeatureInfo
+                    title="Failed Automation Alert"
+                    priority="P0"
+                    description="When automation fails (e.g., jurisdiction website down, validation errors), permits are flagged and highlighted. These need manual submission to the jurisdiction."
+                    dataSource="GET /api/permits?status=new&automation=failed → failedCount"
+                    importance="Critical priority. Failed automations mean permits are stuck. Manual intervention required to prevent customer delays."
+                  />
+                </div>
                 <p className="text-sm text-red-700 dark:text-red-300">
                   Automation failed - please review and submit manually
                 </p>
@@ -94,9 +113,42 @@ export function QueuePage() {
                   <TableHead>Type</TableHead>
                   <TableHead>Customer</TableHead>
                   <TableHead>Address</TableHead>
-                  <TableHead>Automation</TableHead>
-                  <TableHead>Submitted</TableHead>
-                  <TableHead>Assign To</TableHead>
+                  <TableHead>
+                    <div className="flex items-center gap-1">
+                      Automation
+                      <FeatureInfo
+                        title="Automation Status"
+                        priority="P0"
+                        description="Shows if permit was auto-submitted (Auto), manually flagged (Manual), or failed automation (Failed). Failed permits are highlighted in red."
+                        dataSource="permit.automationStatus: 'auto' | 'manual' | 'failed'"
+                        importance="Identifies work type. Auto permits need review only. Failed permits need manual jurisdiction submission."
+                      />
+                    </div>
+                  </TableHead>
+                  <TableHead>
+                    <div className="flex items-center gap-1">
+                      Submitted
+                      <FeatureInfo
+                        title="Wait Time"
+                        priority="P1"
+                        description="When the customer submitted the permit. Shows warning badge if waiting > 24 hours. Oldest permits sorted first."
+                        dataSource="permit.createdAt → Calculate hours since submission"
+                        importance="SLA tracking. Permits waiting > 24h need urgent attention to maintain customer satisfaction."
+                      />
+                    </div>
+                  </TableHead>
+                  <TableHead>
+                    <div className="flex items-center gap-1">
+                      Assign To
+                      <FeatureInfo
+                        title="Agent Assignment"
+                        priority="P1"
+                        description="Dropdown to assign permit to an available agent. Only active agents with agent/admin roles are shown."
+                        dataSource="GET /api/team?role=agent,admin&status=active → POST /api/permits/{id}/assign"
+                        importance="Workload distribution. Assign permits to spread work evenly and establish ownership."
+                      />
+                    </div>
+                  </TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>

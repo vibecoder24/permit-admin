@@ -688,6 +688,29 @@ export function getPermitWithDetails(permitId: string) {
   }
 }
 
+// Helper to get all permits as flat list with related data
+export function getAllPermitsFlat() {
+  return permitRequests.map((permit) => {
+    const project = projects.find((p) => p.id === permit.projectId)!
+    const site = sites.find((s) => s.id === project.siteId)!
+    const customer = customers.find((c) => c.id === site.customerId)!
+
+    return {
+      ...permit,
+      projectName: project.name,
+      projectId: project.id,
+      invoiceStatus: project.invoiceStatus,
+      siteAddress: site.address,
+      siteId: site.id,
+      jurisdictionName: site.jurisdictionName,
+      jurisdictionId: site.jurisdictionId,
+      customerName: customer.name,
+      customerEmail: customer.email,
+      customerId: customer.id,
+    }
+  })
+}
+
 // Helper to get project with all permits
 export function getProjectWithDetails(projectId: string) {
   const project = projects.find((p) => p.id === projectId)

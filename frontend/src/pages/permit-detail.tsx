@@ -28,6 +28,7 @@ import { Select } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Avatar } from "@/components/ui/avatar"
+import { FeatureInfo } from "@/components/ui/feature-info"
 import {
   Table,
   TableBody,
@@ -104,6 +105,13 @@ export function PermitDetailPage() {
         subtitle={permit.permitTypeName}
         actions={
           <div className="flex items-center gap-2">
+            <FeatureInfo
+              title="Permit Detail Page"
+              priority="P0"
+              description="Full detail view for a single permit request. Shows all customer/site/project info, chat history, extracted data, documents, and activity timeline."
+              dataSource="GET /api/permits/{permitId}?include=all → getPermitWithDetails()"
+              importance="Primary work screen for processing permits. All permit actions happen here - review, status update, document upload."
+            />
             <Select
               options={teamMembers
                 .filter((tm) => tm.role !== "viewer" && tm.status === "active")
@@ -189,13 +197,22 @@ export function PermitDetailPage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             <Tabs defaultValue="info">
-              <TabsList>
-                <TabsTrigger value="info">Request Info</TabsTrigger>
-                <TabsTrigger value="chat">Chat History</TabsTrigger>
-                <TabsTrigger value="json">Agent Output</TabsTrigger>
-                <TabsTrigger value="documents">Documents</TabsTrigger>
-                <TabsTrigger value="activity">Activity Log</TabsTrigger>
-              </TabsList>
+              <div className="flex items-center gap-2 mb-2">
+                <TabsList>
+                  <TabsTrigger value="info">Request Info</TabsTrigger>
+                  <TabsTrigger value="chat">Chat History</TabsTrigger>
+                  <TabsTrigger value="json">Agent Output</TabsTrigger>
+                  <TabsTrigger value="documents">Documents</TabsTrigger>
+                  <TabsTrigger value="activity">Activity Log</TabsTrigger>
+                </TabsList>
+                <FeatureInfo
+                  title="Permit Tabs"
+                  priority="P1"
+                  description="5 tabs organize permit data: Info (customer/site/project details), Chat (conversation with customer bot), Agent Output (extracted JSON data), Documents (uploaded files), Activity (status history)."
+                  dataSource="Each tab fetches from different API endpoints or nested permit data"
+                  importance="Organized information architecture. Agents can quickly navigate to the info they need without scrolling."
+                />
+              </div>
 
               {/* Request Info Tab */}
               <TabsContent value="info">
@@ -511,7 +528,16 @@ export function PermitDetailPage() {
             {/* Status Management */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Update Status</CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle className="text-base">Update Status</CardTitle>
+                  <FeatureInfo
+                    title="Status Update"
+                    priority="P0"
+                    description="Change permit status through the workflow. Requires selecting a new status and providing a reason. Status changes are logged in the activity timeline."
+                    dataSource="POST /api/permits/{id}/status { status, reason } → Creates statusHistory entry"
+                    importance="Core workflow action. Moves permits through the pipeline. Reason is required for audit trail and customer communication."
+                  />
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
@@ -541,7 +567,16 @@ export function PermitDetailPage() {
             {/* Quick Stats */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Timeline</CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle className="text-base">Timeline</CardTitle>
+                  <FeatureInfo
+                    title="Permit Timeline"
+                    priority="P2"
+                    description="Quick stats showing when permit was submitted, last updated, total status changes, and document count."
+                    dataSource="permit.createdAt, permit.updatedAt, statusHistory.length, documents.length"
+                    importance="At-a-glance permit health check. Long time since submission or few status changes may indicate stuck permits."
+                  />
+                </div>
               </CardHeader>
               <CardContent>
                 <dl className="space-y-3 text-sm">

@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { FeatureInfo } from "@/components/ui/feature-info"
 import {
   Table,
   TableBody,
@@ -42,7 +43,19 @@ export function SettingsPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <Header title="Settings" subtitle="System configuration" />
+      <Header
+        title="Settings"
+        subtitle="System configuration"
+        actions={
+          <FeatureInfo
+            title="Settings Page"
+            priority="P3"
+            description="Admin-only configuration for system-wide settings. Manage jurisdictions, permit types, invoice templates, and notification preferences."
+            dataSource="GET /api/settings → Various config endpoints for each section"
+            importance="System setup and customization. Changes here affect all users and customer-facing behavior. Requires admin role."
+          />
+        }
+      />
 
       <div className="flex-1 overflow-auto p-6">
         <Tabs defaultValue="jurisdictions">
@@ -69,9 +82,18 @@ export function SettingsPage() {
           <TabsContent value="jurisdictions">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle>Jurisdictions</CardTitle>
-                  <CardDescription>Manage available jurisdictions for permit submissions</CardDescription>
+                <div className="flex items-start gap-2">
+                  <div>
+                    <CardTitle>Jurisdictions</CardTitle>
+                    <CardDescription>Manage available jurisdictions for permit submissions</CardDescription>
+                  </div>
+                  <FeatureInfo
+                    title="Jurisdictions"
+                    priority="P2"
+                    description="Define which jurisdictions (cities/counties) you can submit permits to. Each jurisdiction may have different submission requirements and automation support."
+                    dataSource="GET /api/settings/jurisdictions → POST/PUT/DELETE for CRUD operations"
+                    importance="Determines where customers can submit permits. Inactive jurisdictions won't appear in customer portal dropdown."
+                  />
                 </div>
                 <Dialog open={showAddJurisdiction} onOpenChange={setShowAddJurisdiction}>
                   <DialogTrigger asChild>
@@ -151,9 +173,18 @@ export function SettingsPage() {
           <TabsContent value="permit-types">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle>Permit Types</CardTitle>
-                  <CardDescription>Manage available permit types</CardDescription>
+                <div className="flex items-start gap-2">
+                  <div>
+                    <CardTitle>Permit Types</CardTitle>
+                    <CardDescription>Manage available permit types</CardDescription>
+                  </div>
+                  <FeatureInfo
+                    title="Permit Types"
+                    priority="P2"
+                    description="Define the types of permits you handle (Electrical, Plumbing, HVAC, etc.). Each type can have different pricing and processing workflows."
+                    dataSource="GET /api/settings/permit-types → POST/PUT/DELETE for CRUD operations"
+                    importance="Controls what permit options customers see. Inactive types won't be available for new requests but existing permits remain unaffected."
+                  />
                 </div>
                 <Dialog open={showAddPermitType} onOpenChange={setShowAddPermitType}>
                   <DialogTrigger asChild>
@@ -235,8 +266,19 @@ export function SettingsPage() {
           <TabsContent value="invoicing">
             <Card>
               <CardHeader>
-                <CardTitle>Invoice Defaults</CardTitle>
-                <CardDescription>Configure default settings for new invoices</CardDescription>
+                <div className="flex items-start gap-2">
+                  <div>
+                    <CardTitle>Invoice Defaults</CardTitle>
+                    <CardDescription>Configure default settings for new invoices</CardDescription>
+                  </div>
+                  <FeatureInfo
+                    title="Invoice Defaults"
+                    priority="P3"
+                    description="Set default payment terms, notes template, and per-permit-type pricing. These are pre-filled when creating new invoices but can be overridden."
+                    dataSource="GET /api/settings/invoice-defaults → PUT to save changes"
+                    importance="Speeds up invoice creation with consistent pricing and messaging. Update pricing here when rates change."
+                  />
+                </div>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
@@ -291,8 +333,19 @@ export function SettingsPage() {
           <TabsContent value="notifications">
             <Card>
               <CardHeader>
-                <CardTitle>Notification Settings</CardTitle>
-                <CardDescription>Configure when and how notifications are sent</CardDescription>
+                <div className="flex items-start gap-2">
+                  <div>
+                    <CardTitle>Notification Settings</CardTitle>
+                    <CardDescription>Configure when and how notifications are sent</CardDescription>
+                  </div>
+                  <FeatureInfo
+                    title="Notifications"
+                    priority="P3"
+                    description="Control email notifications for customers and team. Customer notifications inform about invoice and permit status. Team notifications alert about new work and issues."
+                    dataSource="GET /api/settings/notifications → PUT to save changes"
+                    importance="Customer communication and team alerting. Enable key notifications to stay responsive and keep customers informed."
+                  />
+                </div>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>

@@ -19,6 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
+import { FeatureInfo } from "@/components/ui/feature-info"
 import {
   Table,
   TableBody,
@@ -105,7 +106,15 @@ export function ProjectViewPage() {
       <Header
         title="Project Details"
         actions={
-          hasPermission("raise_invoice") && !invoice && (
+          <div className="flex items-center gap-2">
+            <FeatureInfo
+              title="Project View Page"
+              priority="P1"
+              description="Aggregated view of all permits under a single project. Shows project details, all related permits, invoice management, and activity log."
+              dataSource="GET /api/projects/{projectId}?include=permits,invoice,activity → getProjectWithDetails()"
+              importance="Project-level management. See all permits together, create and manage invoices, track overall project progress."
+            />
+            {hasPermission("raise_invoice") && !invoice && (
             <Dialog open={showCreateInvoice} onOpenChange={setShowCreateInvoice}>
               <DialogTrigger asChild>
                 <Button>
@@ -164,7 +173,8 @@ export function ProjectViewPage() {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-          )
+          )}
+          </div>
         }
       />
 
@@ -251,10 +261,19 @@ export function ProjectViewPage() {
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  Permits ({permits.length})
-                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    Permits ({permits.length})
+                  </CardTitle>
+                  <FeatureInfo
+                    title="Project Permits"
+                    priority="P1"
+                    description="All permit requests associated with this project. Shows status, assignment, and submission date. Click permit ID to view details."
+                    dataSource="GET /api/projects/{id}/permits → permits array"
+                    importance="See all permits for a project together. Useful for complex projects with multiple permit types."
+                  />
+                </div>
               </CardHeader>
               <CardContent>
                 <Table>
@@ -347,10 +366,19 @@ export function ProjectViewPage() {
           <div>
             <Card>
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <DollarSign className="h-4 w-4" />
-                  Invoice
-                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <DollarSign className="h-4 w-4" />
+                    Invoice
+                  </CardTitle>
+                  <FeatureInfo
+                    title="Invoice Management"
+                    priority="P1"
+                    description="Create, send, and manage invoices for the project. Shows line items, total amount, sent/paid dates. Admins can create invoices and process refunds."
+                    dataSource="GET /api/projects/{id}/invoice → POST /api/invoices for creation"
+                    importance="Revenue collection. Invoices are sent to customers for permit services. Track payment status and follow up on unpaid invoices."
+                  />
+                </div>
               </CardHeader>
               <CardContent>
                 {invoice ? (
